@@ -224,19 +224,15 @@ Alpine.data('loyaltyApp', () => ({
 
     // ---- Barcode Rendering ----
     renderBarcode(bcid, code) {
-        try {
-            const canvas = document.createElement('canvas');
-            bwipjs.toCanvas(canvas, {
-                bcid,
-                text: code,
-                scale: 3,
-                height: 10,
-                includetext: false,
-            });
-            return canvas.toDataURL('image/png');
-        } catch (e) {
-            throw e;
-        }
+        const canvas = document.createElement('canvas');
+        bwipjs.toCanvas(canvas, {
+            bcid,
+            text: code,
+            scale: 3,
+            height: 10,
+            includetext: false,
+        });
+        return canvas.toDataURL('image/png');
     },
 
     // ---- Barcode Scanning ----
@@ -347,6 +343,7 @@ Alpine.data('loyaltyApp', () => ({
 
             this.cards = validCards.map((c) => this._sanitizeCard(c));
             this.saveCards();
+            this.restoreText = '';
             this.navigateTo('list');
             if (skipped > 0) {
                 this.showToast('Cards restored. Skipped ' + skipped + ' invalid entries.');
