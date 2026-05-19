@@ -10,22 +10,6 @@
   <!-- Card List -->
   <template x-if="cards.length > 0">
     <div>
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
-        "
-      >
-        <button @click="navigateTo('add')">Add Card</button>
-        <a
-          href="#settings"
-          @click.prevent="navigateTo('settings')"
-          style="font-size: 0.9rem"
-          >Settings</a
-        >
-      </div>
       <template x-for="card in cards" :key="card.id">
         <a
           class="card-row"

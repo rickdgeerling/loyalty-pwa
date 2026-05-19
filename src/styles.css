@@ -1,5 +1,67 @@
 @import "../vendor/marx-css/marx.css";
 
+/* ===== App Header ===== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--grey, #fff);
+  border-bottom: 1px solid var(--dividers, #ddd);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 48px;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-link {
+  padding: 4px 8px;
+  /* font-size: 0.9rem; */
+  background: none;
+  border: none;
+  color: var(--link, #0074d9);
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  text-decoration: underline;
+}
+
+.app-name {
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.btn-danger {
+  background: var(--red, #d32f2f);
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background: var(--red, #d32f2f);
+  filter: brightness(0.9);
+}
+
 /* ===== Anti-FOUC ===== */
 [x-cloak] {
   display: none;
@@ -9,11 +71,11 @@
 .card-row {
   display: block;
   width: 100%;
-  padding: 16px;
+  padding: var(--lg-pad, 16px);
   margin-bottom: 4px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: var(--font-size-h3, 1.1rem);
   text-decoration: none;
 }
 
@@ -96,4 +158,11 @@
 
 #settings-import {
   min-height: 120px;
+}
+
+/* ===== Form ===== */
+input[type=color] {
+  display: block;
+  width: 100%;
+  height: 42px;
 }

@@ -1,59 +1,88 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loyalty Cards</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="manifest" href="manifest.json" />
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("sw.js")
-          .then(function (reg) {
-            console.log("SW registered:", reg.scope);
-          })
-          .catch(function (err) {
-            console.error("SW registration failed:", err);
-          });
-      }
-    </script>
-  </head>
-  <body>
-    <div x-data="loyaltyApp" x-cloak>
-      <main>
-        <!-- Card List -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loyalty Cards</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("sw.js")
+        .then(function (reg) {
+          console.log("SW registered:", reg.scope);
+        })
+        .catch(function (err) {
+          console.error("SW registration failed:", err);
+        });
+    }
+  </script>
+</head>
+
+<body>
+  <div x-data="loyaltyApp" x-cloak>
+    <header class="app-header">
+      <div class="app-header-left">
+        <template x-if="currentPage !== 'list'">
+          <button class="btn-link" @click="goBack()">← Back</button>
+        </template>
         <template x-if="currentPage === 'list'">
-          <div>
-            <!-- INCLUDE: templates/list.html -->
+          <span class="app-name">Loyalty</span>
+        </template>
+      </div>
+      <div class="app-header-right">
+        <!-- List: Add Card + Settings -->
+        <template x-if="currentPage === 'list'">
+          <div class="header-actions">
+            <button class="btn-link" @click="navigateTo('settings')">Settings</button>
+            <button @click="navigateTo('add')">Add Card</button>
           </div>
         </template>
-
-        <!-- Card View -->
-        <template x-if="currentPage === 'view'">
-          <div>
-            <!-- INCLUDE: templates/view.html -->
+        <!-- View: Edit + Delete -->
+        <template x-if="currentPage === 'view' && currentCard">
+          <div class="header-actions">
+            <button @click="deleteCard(currentCard.id)" class="btn-danger">Delete</button>
+            <button @click="navigateTo('edit', currentCard.id)">Edit</button>
           </div>
         </template>
+      </div>
+    </header>
+    <main>
+      <!-- Card List -->
+      <template x-if="currentPage === 'list'">
+        <div>
+          <!-- INCLUDE: templates/list.html -->
+        </div>
+      </template>
 
-        <!-- Add/Edit Form -->
-        <template x-if="currentPage === 'add' || currentPage === 'edit'">
-          <div>
-            <!-- INCLUDE: templates/form.html -->
-          </div>
-        </template>
+      <!-- Card View -->
+      <template x-if="currentPage === 'view'">
+        <div>
+          <!-- INCLUDE: templates/view.html -->
+        </div>
+      </template>
 
-        <!-- Settings -->
-        <template x-if="currentPage === 'settings'">
-          <div>
-            <!-- INCLUDE: templates/settings.html -->
-          </div>
-        </template>
-      </main>
+      <!-- Add/Edit Form -->
+      <template x-if="currentPage === 'add' || currentPage === 'edit'">
+        <div>
+          <!-- INCLUDE: templates/form.html -->
+        </div>
+      </template>
 
-      <!-- Toast Container -->
-      <!-- INCLUDE: templates/toast.html -->
-    </div>
-    <script type="module" src="app.js"></script>
-  </body>
+      <!-- Settings -->
+      <template x-if="currentPage === 'settings'">
+        <div>
+          <!-- INCLUDE: templates/settings.html -->
+        </div>
+      </template>
+    </main>
+
+    <!-- Toast Container -->
+    <!-- INCLUDE: templates/toast.html -->
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+
 </html>

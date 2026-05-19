@@ -80,6 +80,14 @@ Alpine.data("loyaltyApp", () => ({
     }
   },
 
+  goBack() {
+    if (this.currentPage === "edit" && this.editingId) {
+      this.navigateTo("view", this.editingId);
+    } else {
+      this.navigateTo("list");
+    }
+  },
+
   syncRoute() {
     const { page, cardId } = parseHash();
 
