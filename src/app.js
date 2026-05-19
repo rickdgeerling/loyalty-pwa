@@ -127,7 +127,9 @@ Alpine.data('loyaltyApp', () => ({
             && typeof c.id === 'string'
             && typeof c.name === 'string'
             && typeof c.code === 'string'
-            && typeof c.barcodeType === 'string';
+            && typeof c.barcodeType === 'string'
+            && typeof c.barcodeDataURL === 'string'
+            && c.barcodeDataURL.length > 0;
     },
 
     _sanitizeCard(card) {
@@ -145,6 +147,14 @@ Alpine.data('loyaltyApp', () => ({
             return;
         }
 
+        let barcodeDataURL;
+        try {
+            barcodeDataURL = this.renderBarcode(this.form.barcodeType, this.form.code.trim());
+        } catch (e) {
+            this.showToast('Invalid code for ' + this.form.barcodeType + ': ' + (e.message || 'encoding failed'));
+            return;
+        }
+
         const card = {
             id: generateId(),
             name: this.form.name.trim(),
@@ -152,7 +162,7 @@ Alpine.data('loyaltyApp', () => ({
             textColor: computeTextColor(this.form.color),
             code: this.form.code.trim(),
             barcodeType: this.form.barcodeType,
-            barcodeDataURL: '', // populated in Step 5
+            barcodeDataURL,
             createdAt: new Date().toISOString(),
         };
         this.cards.push(card);
@@ -170,6 +180,14 @@ Alpine.data('loyaltyApp', () => ({
         const idx = this.cards.findIndex((c) => c.id === this.editingId);
         if (idx === -1) return;
 
+        let barcodeDataURL;
+        try {
+            barcodeDataURL = this.renderBarcode(this.form.barcodeType, this.form.code.trim());
+        } catch (e) {
+            this.showToast('Invalid code for ' + this.form.barcodeType + ': ' + (e.message || 'encoding failed'));
+            return;
+        }
+
         this.cards[idx] = {
             ...this.cards[idx],
             name: this.form.name.trim(),
@@ -177,7 +195,7 @@ Alpine.data('loyaltyApp', () => ({
             textColor: computeTextColor(this.form.color),
             code: this.form.code.trim(),
             barcodeType: this.form.barcodeType,
-            barcodeDataURL: '', // re-rendered in Step 5
+            barcodeDataURL,
         };
         this.saveCards();
         this.navigateTo('view', this.editingId);
@@ -192,10 +210,21 @@ Alpine.data('loyaltyApp', () => ({
         this.showToast('Card deleted.');
     },
 
-    // ---- Barcode Rendering (stub — completed in Step 5) ----
+    // ---- Barcode Rendering ----
     renderBarcode(bcid, code) {
-        // Stub: will render via bwip-js in Step 5
-        return '';
+        try {
+            const canvas = document.createElement('canvas');
+            bwipjs.toCanvas(canvas, {
+                bcid,
+                text: code,
+                scale: 3,
+                height: 10,
+                includetext: false,
+            });
+            return canvas.toDataURL('image/png');
+        } catch (e) {
+            throw e;
+        }
     },
 
     // ---- Barcode Scanning (stub — completed in Step 6) ----
