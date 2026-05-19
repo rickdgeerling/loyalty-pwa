@@ -36,7 +36,7 @@
         <input type="file" id="card-scan"
                accept="image/*"
                capture="environment"
-               @change="scanBarcode($event.target.files[0])">
+               @change="scanBarcode($event.target.files[0]); $event.target.value = null">
 
         <div style="display: flex; gap: 8px; margin-top: 16px;">
             <button type="submit" x-text="editingId ? 'Save Changes' : 'Add Card'"></button>

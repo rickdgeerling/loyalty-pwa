@@ -1,10 +1,22 @@
 import Alpine from 'alpinejs';
 import bwipjs from 'bwip-js';
-import { BrowserMultiFormatReader } from '@zxing/library';
+import { BrowserMultiFormatReader, BarcodeFormat } from '@zxing/library';
 
 // ===== Constants =====
 const STORAGE_KEY = 'loyalty-cards';
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+
+const ZXING_MAP = {
+    [BarcodeFormat.EAN_13]: 'ean13',
+    [BarcodeFormat.EAN_8]: 'ean8',
+    [BarcodeFormat.UPC_A]: 'ean13',
+    [BarcodeFormat.CODE_39]: 'code39',
+    [BarcodeFormat.CODE_128]: 'code128',
+    [BarcodeFormat.ITF]: 'interleaved2of5',
+    [BarcodeFormat.QR_CODE]: 'qrcode',
+};
+
+const barcodeReader = new BrowserMultiFormatReader();
 
 // ===== Helpers =====
 function generateId() {
@@ -227,9 +239,30 @@ Alpine.data('loyaltyApp', () => ({
         }
     },
 
-    // ---- Barcode Scanning (stub — completed in Step 6) ----
+    // ---- Barcode Scanning ----
     async scanBarcode(file) {
-        // Stub: will use @zxing/library in Step 6
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        try {
+            const result = await barcodeReader.decodeFromImageUrl(url);
+            // Only apply results if still on the form page
+            const page = this.currentPage;
+            if (page !== 'add' && page !== 'edit') return;
+
+            const format = result.getBarcodeFormat();
+            const bcid = ZXING_MAP[format];
+            if (!bcid) {
+                this.showToast('Unsupported barcode type detected.');
+                return;
+            }
+            this.form.code = result.getText();
+            this.form.barcodeType = bcid;
+            this.form.manualTypeOverride = false;
+        } catch (e) {
+            this.showToast('No barcode detected in image.');
+        } finally {
+            URL.revokeObjectURL(url);
+        }
     },
 
     // ---- Auto-Detection (stub — completed in Step 7) ----
