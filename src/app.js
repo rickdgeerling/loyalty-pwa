@@ -265,9 +265,38 @@ Alpine.data('loyaltyApp', () => ({
         }
     },
 
-    // ---- Auto-Detection (stub — completed in Step 7) ----
+    // ---- Auto-Detection ----
     autoDetectType() {
-        // Stub: will detect type from pattern in Step 7
+        if (this.form.manualTypeOverride) return;
+
+        const code = this.form.code;
+        if (!code) return;
+
+        if (/^\d{12,13}$/.test(code)) {
+            this.form.barcodeType = 'ean13';
+            // Pad 12-digit UPC-A codes with leading zero for EAN-13
+            if (code.length === 12 && this.form.code.length === 12) {
+                this.form.code = '0' + code;
+            }
+        } else if (/^\d{7,8}$/.test(code)) {
+            this.form.barcodeType = 'ean8';
+            // Pad 7-digit codes with leading zero for EAN-8
+            if (code.length === 7 && this.form.code.length === 7) {
+                this.form.code = '0' + code;
+            }
+        } else if (/^[A-Z0-9\-. $/+%]+$/.test(code) && /[A-Z]/.test(code)) {
+            this.form.barcodeType = 'code39';
+            // Auto-uppercase for Code 39
+            if (this.form.code !== this.form.code.toUpperCase()) {
+                this.form.code = this.form.code.toUpperCase();
+            }
+        } else if (/^\d+$/.test(code) && code.length % 2 === 0 && code.length >= 8) {
+            this.form.barcodeType = 'interleaved2of5';
+        } else if (/^[\x20-\x7E]+$/.test(code)) {
+            this.form.barcodeType = 'code128';
+        } else {
+            this.form.barcodeType = 'qrcode';
+        }
     },
 
     // ---- Toast System ----
