@@ -1,12 +1,12 @@
 const VERSION = "1";
 const CACHE_NAME = "loyalty-pwa-v" + VERSION;
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/app.js",
-  "/styles.css",
-  "/manifest.json",
-  "/icon.svg",
+  "./",
+  "index.html",
+  "app.js",
+  "styles.css",
+  "manifest.json",
+  "icon.svg",
 ];
 
 // ---- Install: pre-cache all static assets ----
@@ -72,7 +72,7 @@ self.addEventListener("fetch", function (event) {
       .catch(function () {
         // Network failed or timed out — serve from cache, fall back to index.html
         return caches.match(event.request).then(function (cached) {
-          return cached || caches.match("/index.html");
+          return cached || caches.match("index.html");
         });
       }),
   );
