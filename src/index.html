@@ -6,13 +6,53 @@
     <title>Loyalty Cards</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(function (reg) {
+                    console.log('SW registered:', reg.scope);
+                })
+                .catch(function (err) {
+                    console.error('SW registration failed:', err);
+                });
+        }
+    </script>
 </head>
 <body>
-    <!-- INCLUDE: templates/list.html -->
-    <!-- INCLUDE: templates/view.html -->
-    <!-- INCLUDE: templates/form.html -->
-    <!-- INCLUDE: templates/settings.html -->
-    <!-- INCLUDE: templates/toast.html -->
+    <div x-data="loyaltyApp" x-cloak>
+        <main>
+            <!-- Card List -->
+            <template x-if="currentPage === 'list'">
+                <div>
+                    <!-- INCLUDE: templates/list.html -->
+                </div>
+            </template>
+
+            <!-- Card View -->
+            <template x-if="currentPage === 'view'">
+                <div>
+                    <!-- INCLUDE: templates/view.html -->
+                </div>
+            </template>
+
+            <!-- Add/Edit Form -->
+            <template x-if="currentPage === 'add' || currentPage === 'edit'">
+                <div>
+                    <!-- INCLUDE: templates/form.html -->
+                </div>
+            </template>
+
+            <!-- Settings -->
+            <template x-if="currentPage === 'settings'">
+                <div>
+                    <!-- INCLUDE: templates/settings.html -->
+                </div>
+            </template>
+        </main>
+
+        <!-- Toast Container -->
+        <!-- INCLUDE: templates/toast.html -->
+    </div>
     <script type="module" src="app.js"></script>
 </body>
 </html>

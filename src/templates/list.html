@@ -1,1 +1,27 @@
-<!-- Card list view — stub, populated in Step 2 -->
+<div>
+    <!-- Empty State -->
+    <template x-if="cards.length === 0">
+        <div class="empty-state">
+            <p>No loyalty cards yet.</p>
+            <button @click="navigateTo('add')">Add your first card</button>
+        </div>
+    </template>
+
+    <!-- Card List -->
+    <template x-if="cards.length > 0">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <button @click="navigateTo('add')">Add Card</button>
+                <a href="#settings" @click.prevent="navigateTo('settings')" style="font-size: 0.9rem;">Settings</a>
+            </div>
+            <template x-for="card in cards" :key="card.id">
+                <a class="card-row"
+                   :style="'background-color: ' + card.color + '; color: ' + card.textColor"
+                   :href="'#view/' + card.id"
+                   @click.prevent="navigateTo('view', card.id)">
+                    <span x-text="card.name"></span>
+                </a>
+            </template>
+        </div>
+    </template>
+</div>

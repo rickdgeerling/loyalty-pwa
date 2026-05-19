@@ -1,1 +1,46 @@
-<!-- Add/Edit form — stub, populated in Step 2 -->
+<div>
+    <template x-if="editingId">
+        <h2>Edit Card</h2>
+    </template>
+    <template x-if="!editingId">
+        <h2>Add Card</h2>
+    </template>
+
+    <form @submit.prevent="editingId ? updateCard() : addCard()">
+        <label for="card-name">Name</label>
+        <input type="text" id="card-name" x-model="form.name" required placeholder="e.g. Grocery Store">
+
+        <label for="card-color">Color</label>
+        <input type="color" id="card-color" x-model="form.color">
+
+        <label for="card-code">Barcode Code</label>
+        <input type="text" id="card-code"
+               x-model="form.code"
+               @input="autoDetectType()"
+               required
+               placeholder="Type or scan below">
+
+        <label for="card-type">Barcode Type</label>
+        <select id="card-type"
+                x-model="form.barcodeType"
+                @change="form.manualTypeOverride = true">
+            <option value="ean13">EAN-13</option>
+            <option value="ean8">EAN-8</option>
+            <option value="code39">Code 39</option>
+            <option value="code128">Code 128</option>
+            <option value="interleaved2of5">ITF (Interleaved 2 of 5)</option>
+            <option value="qrcode">QR Code</option>
+        </select>
+
+        <label for="card-scan">Scan Barcode</label>
+        <input type="file" id="card-scan"
+               accept="image/*"
+               capture="environment"
+               @change="scanBarcode($event.target.files[0])">
+
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <button type="submit" x-text="editingId ? 'Save Changes' : 'Add Card'"></button>
+            <button type="button" @click="navigateTo(editingId ? 'view' : 'list', editingId)">Cancel</button>
+        </div>
+    </form>
+</div>
