@@ -1,16 +1,16 @@
 {
-    "name": "Loyalty Cards",
-    "short_name": "Loyalty",
-    "start_url": ".",
-    "display": "standalone",
-    "theme_color": "#5a7d4a",
-    "background_color": "#ffffff",
-    "icons": [
-        {
-            "src": "/icon.svg",
-            "sizes": "any",
-            "type": "image/svg+xml",
-            "purpose": "any maskable"
-        }
-    ]
+  "name": "Loyalty Cards",
+  "short_name": "Loyalty",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#5a7d4a",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }

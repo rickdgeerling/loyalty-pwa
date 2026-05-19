@@ -1,5 +1,9 @@
 <div class="toast-container">
-    <template x-for="toast in toasts" :key="toast.id">
-        <div class="toast" x-text="toast.message" @click="removeToast(toast.id)"></div>
-    </template>
+  <template x-for="toast in toasts" :key="toast.id">
+    <div
+      class="toast"
+      x-text="toast.message"
+      @click="removeToast(toast.id)"
+    ></div>
+  </template>
 </div>

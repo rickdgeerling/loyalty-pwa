@@ -1,29 +1,45 @@
 <div>
-    <template x-if="currentCard">
-        <div>
-            <button @click="navigateTo('list')" style="margin-bottom: 16px;">← Back</button>
+  <template x-if="currentCard">
+    <div>
+      <button @click="navigateTo('list')" style="margin-bottom: 16px">
+        ← Back
+      </button>
 
-            <h2 x-text="currentCard.name"></h2>
+      <h2 x-text="currentCard.name"></h2>
 
-            <div style="background: #f5f5f5; border-radius: 4px; padding: 16px; margin-bottom: 16px;">
-                <img class="barcode-img"
-                     :src="currentCard.barcodeDataURL"
-                     :alt="'Barcode: ' + currentCard.code">
-            </div>
+      <div
+        style="
+          background: #f5f5f5;
+          border-radius: 4px;
+          padding: 16px;
+          margin-bottom: 16px;
+        "
+      >
+        <img
+          class="barcode-img"
+          :src="currentCard.barcodeDataURL"
+          :alt="'Barcode: ' + currentCard.code"
+        />
+      </div>
 
-            <p class="barcode-code" x-text="currentCard.code"></p>
+      <p class="barcode-code" x-text="currentCard.code"></p>
 
-            <div style="display: flex; gap: 8px; margin-top: 24px;">
-                <button @click="navigateTo('edit', currentCard.id)">Edit</button>
-                <button @click="deleteCard(currentCard.id)" style="background: var(--red);">Delete</button>
-            </div>
-        </div>
-    </template>
+      <div style="display: flex; gap: 8px; margin-top: 24px">
+        <button @click="navigateTo('edit', currentCard.id)">Edit</button>
+        <button
+          @click="deleteCard(currentCard.id)"
+          style="background: var(--red)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </template>
 
-    <template x-if="!currentCard">
-        <div class="empty-state">
-            <p>Card not found.</p>
-            <button @click="navigateTo('list')">Back to list</button>
-        </div>
-    </template>
+  <template x-if="!currentCard">
+    <div class="empty-state">
+      <p>Card not found.</p>
+      <button @click="navigateTo('list')">Back to list</button>
+    </div>
+  </template>
 </div>
