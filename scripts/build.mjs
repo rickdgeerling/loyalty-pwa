@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild';
 import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync, rmSync } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 
 const root = join(import.meta.dirname, '..');
 const src = join(root, 'src');

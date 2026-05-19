@@ -136,7 +136,7 @@ Alpine.data("loyaltyApp", () => ({
         return;
       }
       this.cards = data.cards.filter(this._isValidCard);
-    } catch (e) {
+    } catch {
       this.showToast("Could not load saved cards — starting fresh.");
       this.cards = [];
     }
@@ -145,7 +145,7 @@ Alpine.data("loyaltyApp", () => ({
   saveCards() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ cards: this.cards }));
-    } catch (e) {
+    } catch {
       this.showToast(
         "Could not save changes — storage may be full or unavailable.",
       );
@@ -293,7 +293,7 @@ Alpine.data("loyaltyApp", () => ({
       this.form.code = result.getText();
       this.form.barcodeType = bcid;
       this.form.manualTypeOverride = false;
-    } catch (e) {
+    } catch {
       this.showToast("No barcode detected in image.");
     } finally {
       URL.revokeObjectURL(url);
@@ -408,7 +408,7 @@ Alpine.data("loyaltyApp", () => ({
       } else {
         this.showToast("Cards restored.");
       }
-    } catch (e) {
+    } catch {
       this.showToast("Invalid JSON format.");
     }
   },
