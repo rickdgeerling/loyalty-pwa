@@ -1,9 +1,10 @@
 {
   "name": "loyalty-pwa",
   "version": "1.0.0",
-  "description": "",
+  "description": "Offline-first loyalty card PWA",
   "main": "index.js",
   "scripts": {
+    "build": "node scripts/build.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
