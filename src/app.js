@@ -56,21 +56,14 @@ Alpine.data("loyaltyApp", () => ({
   },
   editingId: null,
   restoreText: "",
+  currentPage: "list",
+  currentCardId: null,
 
   // ---- Lifecycle ----
   init() {
     this.loadCards();
     this.syncRoute();
     window.addEventListener("hashchange", () => this.syncRoute());
-  },
-
-  // ---- Reactive Getters ----
-  get currentPage() {
-    return parseHash().page;
-  },
-
-  get currentCardId() {
-    return parseHash().cardId;
   },
 
   get currentCard() {
@@ -120,6 +113,8 @@ Alpine.data("loyaltyApp", () => ({
     if (page !== "edit") {
       this.editingId = null;
     }
+    this.currentPage = page;
+    this.currentCardId = cardId;
   },
 
   // ---- localStorage ----
