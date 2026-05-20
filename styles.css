@@ -707,7 +707,7 @@ tfoot td {
   display: block;
   width: 100%;
   padding: var(--lg-pad, 16px);
-  margin-bottom: 4px;
+  margin-bottom: var(--sm-pad);
   border-radius: 4px;
   cursor: pointer;
   font-size: var(--font-size-h3, 1.1rem);
