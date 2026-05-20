@@ -85895,7 +85895,16 @@ module_default.data("loyaltyApp", () => ({
         this.cards = [];
         return;
       }
-      this.cards = data2.cards.filter(this._isValidCard);
+      this.cards = data2.cards.filter(this._isValidCard).map((c) => {
+        if (!c.barcodeDataURL) {
+          try {
+            c.barcodeDataURL = this.renderBarcode(c.barcodeType, c.code);
+          } catch {
+            c.barcodeDataURL = "";
+          }
+        }
+        return c;
+      });
     } catch {
       this.showToast("Could not load saved cards \u2014 starting fresh.");
       this.cards = [];
@@ -85912,7 +85921,7 @@ module_default.data("loyaltyApp", () => ({
   },
   // ---- Card Validation ----
   _isValidCard(c) {
-    return c && typeof c.id === "string" && typeof c.name === "string" && typeof c.code === "string" && typeof c.barcodeType === "string" && typeof c.barcodeDataURL === "string" && c.barcodeDataURL.length > 0;
+    return c && typeof c.id === "string" && typeof c.name === "string" && typeof c.code === "string" && typeof c.barcodeType === "string";
   },
   _sanitizeCard(card) {
     return {
@@ -85999,8 +86008,7 @@ module_default.data("loyaltyApp", () => ({
     bwip_js_default.toCanvas(canvas, {
       bcid,
       text: code,
-      scale: 3,
-      height: 10,
+      scale: 7,
       includetext: false
     });
     return canvas.toDataURL("image/png");
@@ -86022,7 +86030,8 @@ module_default.data("loyaltyApp", () => ({
       this.form.code = result.getText();
       this.form.barcodeType = bcid;
       this.form.manualTypeOverride = false;
-    } catch {
+    } catch (error2) {
+      console.error(error2);
       this.showToast("No barcode detected in image.");
     } finally {
       URL.revokeObjectURL(url);
@@ -86070,7 +86079,8 @@ module_default.data("loyaltyApp", () => ({
   },
   // ---- Settings ----
   exportJSON() {
-    return JSON.stringify({ cards: this.cards }, null, 2);
+    const cards = this.cards.map(({ barcodeDataURL, ...rest }) => rest);
+    return JSON.stringify({ cards }, null, 2);
   },
   copyExport() {
     const json = this.exportJSON();
@@ -86099,7 +86109,18 @@ module_default.data("loyaltyApp", () => ({
         "Replace all " + this.cards.length + " cards with " + validCards.length + " cards from backup?"
       ))
         return;
-      this.cards = validCards.map((c) => this._sanitizeCard(c));
+      this.cards = validCards.map((c) => {
+        const sanitized = this._sanitizeCard(c);
+        try {
+          sanitized.barcodeDataURL = this.renderBarcode(
+            sanitized.barcodeType,
+            sanitized.code
+          );
+        } catch {
+          sanitized.barcodeDataURL = "";
+        }
+        return sanitized;
+      });
       this.saveCards();
       this.restoreText = "";
       this.navigateTo("list");

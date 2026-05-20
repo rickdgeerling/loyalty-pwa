@@ -720,7 +720,7 @@ tfoot td {
 }
 .barcode-img {
   display: block;
-  max-width: calc(100vw - 32px);
+  max-width: calc(100vw - calc(var(--md-pad)*4));
   margin: 0 auto;
 }
 .barcode-code {
