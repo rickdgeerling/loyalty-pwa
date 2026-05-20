@@ -138,7 +138,16 @@ Alpine.data("loyaltyApp", () => ({
         this.cards = [];
         return;
       }
-      this.cards = data.cards.filter(this._isValidCard);
+      this.cards = data.cards.filter(this._isValidCard).map((c) => {
+        if (!c.barcodeDataURL) {
+          try {
+            c.barcodeDataURL = this.renderBarcode(c.barcodeType, c.code);
+          } catch {
+            c.barcodeDataURL = "";
+          }
+        }
+        return c;
+      });
     } catch {
       this.showToast("Could not load saved cards — starting fresh.");
       this.cards = [];
@@ -162,9 +171,7 @@ Alpine.data("loyaltyApp", () => ({
       typeof c.id === "string" &&
       typeof c.name === "string" &&
       typeof c.code === "string" &&
-      typeof c.barcodeType === "string" &&
-      typeof c.barcodeDataURL === "string" &&
-      c.barcodeDataURL.length > 0
+      typeof c.barcodeType === "string"
     );
   },
 
@@ -357,7 +364,12 @@ Alpine.data("loyaltyApp", () => ({
 
   // ---- Settings ----
   exportJSON() {
-    return JSON.stringify({ cards: this.cards }, null, 2);
+    const cards = this.cards.map((c) => {
+      const copy = { ...c };
+      delete copy.barcodeDataURL;
+      return copy;
+    });
+    return JSON.stringify({ cards }, null, 2);
   },
 
   copyExport() {
@@ -400,7 +412,18 @@ Alpine.data("loyaltyApp", () => ({
       )
         return;
 
-      this.cards = validCards.map((c) => this._sanitizeCard(c));
+      this.cards = validCards.map((c) => {
+        const sanitized = this._sanitizeCard(c);
+        try {
+          sanitized.barcodeDataURL = this.renderBarcode(
+            sanitized.barcodeType,
+            sanitized.code,
+          );
+        } catch {
+          sanitized.barcodeDataURL = "";
+        }
+        return sanitized;
+      });
       this.saveCards();
       this.restoreText = "";
       this.navigateTo("list");
