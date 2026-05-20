@@ -270,8 +270,7 @@ Alpine.data("loyaltyApp", () => ({
     bwipjs.toCanvas(canvas, {
       bcid,
       text: code,
-      scale: 3,
-      height: 10,
+      scale: 7,
       includetext: false,
     });
     return canvas.toDataURL("image/png");
@@ -296,7 +295,8 @@ Alpine.data("loyaltyApp", () => ({
       this.form.code = result.getText();
       this.form.barcodeType = bcid;
       this.form.manualTypeOverride = false;
-    } catch {
+    } catch (error) {
+      console.error(error);
       this.showToast("No barcode detected in image.");
     } finally {
       URL.revokeObjectURL(url);
